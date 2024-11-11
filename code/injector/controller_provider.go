@@ -2,7 +2,8 @@ package injector
 
 import "admin/microservice/interfaces/api/controller"
 
-// var (
-var PermissionController = controller.NewPermissionController(PermissionService)
-
-//)
+var (
+	PermissionController = controller.NewPermissionController(PermissionService)
+	EmployeeController   = controller.NewEmployeeController(EmployeeService)
+	NavigationController = controller.NewNavigationController(NavigationBarService)
+)

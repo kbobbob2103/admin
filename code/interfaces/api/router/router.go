@@ -6,8 +6,17 @@ import (
 )
 
 func ApplicationV1Routes(engine *gin.Engine) {
-	route := engine.Group("/api/admin/v1/admin")
-	billCTL := injector.PermissionController
-	route.GET("test", billCTL.Test)
-	route.POST("", billCTL.CreatePermissionController)
+
+	routeAmin := engine.Group("/api/admin/v1/admin")
+	adminCTL := injector.EmployeeController
+	routeAmin.POST("", adminCTL.CreateEmployeeController)
+
+	route := engine.Group("/api/admin/v1/permission")
+	permissionCTL := injector.PermissionController
+	route.GET("test", permissionCTL.Test)
+	route.POST("", permissionCTL.CreatePermissionController)
+
+	routeNavigation := engine.Group("/api/admin/v1/navigation_bar")
+	navigationCTL := injector.NavigationController
+	routeNavigation.POST("", navigationCTL.CreateNavigationController)
 }

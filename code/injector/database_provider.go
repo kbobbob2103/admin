@@ -21,5 +21,7 @@ var NewAdminMongoClient *mongo.Database = func() *mongo.Database {
 }()
 
 var (
-	PermissionRepository = memory.NewPermissionMongoRepository(NewAdminMongoClient)
+	PermissionRepository    = memory.NewPermissionMongoRepository(NewAdminMongoClient)
+	EmployeeRepository      = memory.NewEmployeeMongoRepository(NewAdminMongoClient)
+	NavigationBarRepository = memory.NewNavigationMongoRepository(NewAdminMongoClient)
 )
