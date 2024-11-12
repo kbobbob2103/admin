@@ -6,5 +6,5 @@ var (
 	PermissionService    = application.NewPermissionService(PermissionRepository)
 	EmployeeService      = application.NewEmployeeService(EmployeeRepository)
 	NavigationBarService = application.NewNavigationBarService(NavigationBarRepository)
-	RoleService          = application.NewRoleService(RoleBarRepository)
+	RoleService          = application.NewRoleService(RoleBarRepository, PermissionService, NavigationBarRepository)
 )

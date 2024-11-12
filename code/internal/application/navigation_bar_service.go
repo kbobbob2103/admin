@@ -7,6 +7,7 @@ import (
 
 type INavigationBarService interface {
 	CreateNavigationService(data dto.NavigationBar) error
+	FindAllNavigationBarService() ([]dto.NavigationBar, error)
 }
 type navigationBarService struct {
 	navigationBarRepo repositoty.INavigationRepo
@@ -20,4 +21,7 @@ func NewNavigationBarService(
 }
 func (a navigationBarService) CreateNavigationService(data dto.NavigationBar) error {
 	return a.navigationBarRepo.CreateNavigation(data)
+}
+func (a navigationBarService) FindAllNavigationBarService() ([]dto.NavigationBar, error) {
+	return a.navigationBarRepo.FindAllNavigationBar()
 }

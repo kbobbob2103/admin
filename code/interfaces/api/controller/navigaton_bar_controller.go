@@ -2,6 +2,7 @@ package controller
 
 import (
 	"admin/microservice/infra/dto"
+	"admin/microservice/interfaces/api/controller/res"
 	"admin/microservice/interfaces/api/exceptions"
 	"admin/microservice/internal/application"
 	"github.com/gin-gonic/gin"
@@ -34,4 +35,12 @@ func (n navigationController) CreateNavigationController(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": "สร้างสำเร็จ"})
 
+}
+func (n navigationController) GetAllController(c *gin.Context) {
+	data, err := n.navigationService.FindAllNavigationBarService()
+	if err != nil {
+		res.HandleError(c, err, "slice")
+		return
+	}
+	res.HandleSuccess(c, data, "")
 }

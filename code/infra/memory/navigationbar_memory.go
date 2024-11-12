@@ -1,10 +1,10 @@
 package memory
 
 import (
+	"admin/microservice/exception"
 	"admin/microservice/infra/dto"
 	"admin/microservice/internal/domain/repositoty"
 	"context"
-	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
@@ -39,7 +39,32 @@ func (n navigationMongoRepository) CreateNavigation(data dto.NavigationBar) erro
 
 	_, err := n.collection.InsertOne(ctx, data)
 	if err != nil {
-		return errors.New("สร้างข้อมูลไม่สำเร็จ")
+		return exception.NewAppError(
+			exception.ErrCodeDatabase,
+			err.Error(),
+		)
 	}
 	return nil
+}
+func (n navigationMongoRepository) FindAllNavigationBar() ([]dto.NavigationBar, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	filters := bson.M{}
+	employees := make([]dto.NavigationBar, 0)
+	cursor, err := n.collection.Find(ctx, filters)
+	if err != nil {
+		return []dto.NavigationBar{}, exception.NewAppError(
+			exception.ErrCodeDatabase,
+			err.Error(),
+		)
+	}
+	defer cursor.Close(ctx)
+	for cursor.Next(ctx) {
+		result := dto.NavigationBar{}
+		if err = cursor.Decode(&result); err != nil {
+			return []dto.NavigationBar{}, err
+		}
+		employees = append(employees, result)
+	}
+	return employees, nil
 }
