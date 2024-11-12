@@ -13,10 +13,13 @@ func ApplicationV1Routes(engine *gin.Engine) {
 
 	route := engine.Group("/api/admin/v1/permission")
 	permissionCTL := injector.PermissionController
-	route.GET("test", permissionCTL.Test)
 	route.POST("", permissionCTL.CreatePermissionController)
 
 	routeNavigation := engine.Group("/api/admin/v1/navigation_bar")
 	navigationCTL := injector.NavigationController
 	routeNavigation.POST("", navigationCTL.CreateNavigationController)
+
+	routeRole := engine.Group("/api/admin/v1/role")
+	roleCTL := injector.RoleController
+	routeRole.POST("", roleCTL.CreateRoleController)
 }
