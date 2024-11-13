@@ -32,4 +32,9 @@ func ApplicationV1Routes(engine *gin.Engine) {
 	routeRole.GET("", roleCTL.GetAllRoleController)
 	routeRole.GET(":role_id", roleCTL.GetOneRoleController)
 	routeRole.PATCH("", roleCTL.UpdateRoleController)
+
+	routeRank := engine.Group("/api/admin/v1/rank")
+	rankCTL := injector.RankController
+	routeRank.POST("", rankCTL.CreateRankController)
+	routeRank.GET("", rankCTL.GetAllController)
 }

@@ -7,4 +7,5 @@ var (
 	EmployeeService      = application.NewEmployeeService(EmployeeRepository)
 	NavigationBarService = application.NewNavigationBarService(NavigationBarRepository)
 	RoleService          = application.NewRoleService(RoleBarRepository, PermissionService, NavigationBarRepository)
+	RankService          = application.NewRankBarService(RankRepository)
 )

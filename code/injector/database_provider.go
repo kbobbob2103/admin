@@ -25,4 +25,5 @@ var (
 	EmployeeRepository      = memory.NewEmployeeMongoRepository(NewAdminMongoClient)
 	NavigationBarRepository = memory.NewNavigationMongoRepository(NewAdminMongoClient)
 	RoleBarRepository       = memory.NewRoleMongoRepository(NewAdminMongoClient)
+	RankRepository          = memory.NewRankMongoRepository(NewAdminMongoClient)
 )

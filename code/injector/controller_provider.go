@@ -7,4 +7,5 @@ var (
 	EmployeeController   = controller.NewEmployeeController(EmployeeService)
 	NavigationController = controller.NewNavigationController(NavigationBarService)
 	RoleController       = controller.NewRoleController(RoleService)
+	RankController       = controller.NewRankController(RankService)
 )
