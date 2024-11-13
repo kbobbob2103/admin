@@ -10,6 +10,7 @@ type IEmployeeRepo interface {
 		page,
 		limit int,
 	) ([]dto.Employee, error)
+	FindOneUserName(userName string) (dto.Employee, error)
 	FindOneByID(id string) (dto.Employee, error)
 	CreateEmployee(data dto.Employee) error
 	UpdateOne(data dto.Employee) error

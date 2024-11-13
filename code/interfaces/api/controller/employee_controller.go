@@ -2,6 +2,7 @@ package controller
 
 import (
 	"admin/microservice/exception"
+	"admin/microservice/helpers"
 	"admin/microservice/infra/dto"
 	"admin/microservice/interfaces/api/controller/res"
 	"admin/microservice/internal/application"
@@ -20,6 +21,24 @@ func NewEmployeeController(
 	}
 }
 
+// Authorization
+func (a employeeController) Login(c *gin.Context) {
+	var r dto.Employee
+	if err := c.ShouldBindJSON(&r); err != nil {
+		res.HandleError(
+			c,
+			exception.NewAppError(exception.ErrCodeBadRequest, err.Error()),
+			"",
+		)
+		return
+	}
+	token, err := a.employeeService.LoginService(r.UserName, r.Password)
+	if err != nil {
+		res.HandleError(c, err, "object")
+		return
+	}
+	res.HandleSuccess(c, map[string]string{"token": token}, "created")
+}
 func (a employeeController) CreateEmployeeController(c *gin.Context) {
 	r := dto.NewEmployee()
 	if err := c.ShouldBindJSON(&r); err != nil {
@@ -30,6 +49,9 @@ func (a employeeController) CreateEmployeeController(c *gin.Context) {
 		)
 		return
 	}
+	token, refreshToken, _ := helpers.GenerateAllTokens(r.EmployeeID, r.EmployeeName, r.UserName, r.RoleID)
+	r.Token = token
+	r.RefreshToken = refreshToken
 	err := a.employeeService.CreateEmployeeService(r)
 	if err != nil {
 		res.HandleError(c, err, "object")

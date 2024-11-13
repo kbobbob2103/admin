@@ -1,8 +1,10 @@
 package application
 
 import (
+	"admin/microservice/helpers"
 	"admin/microservice/infra/dto"
 	"admin/microservice/internal/domain/repositoty"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type IEmployeeService interface {
@@ -13,6 +15,7 @@ type IEmployeeService interface {
 	UpdateStatus(id string, status bool) error
 	UpdateStatusEmployee(id string, statusEmployee dto.StatusEmployee) error
 	FindCount(query dto.QueryEmployee) (int64, error)
+	LoginService(userName string, foundPassWord string) (string, error)
 }
 type employeeService struct {
 	employeeRepo repositoty.IEmployeeRepo
@@ -24,7 +27,44 @@ func NewEmployeeService(
 		employeeRepo: employeeRepo,
 	}
 }
+func (a employeeService) LoginService(userName string, foundPassWord string) (string, error) {
+	employee, err := a.employeeRepo.FindOneUserName(userName)
+	if err != nil {
+		return "", err
+	}
+
+	err = VerifyPassword(employee.Password, foundPassWord)
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
+	token, _, err := helpers.GenerateAllTokens(
+		employee.EmployeeID,
+		employee.EmployeeName,
+		employee.Password,
+		employee.RoleID)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+
+}
+func VerifyPassword(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	//check := true
+	////msg := ""
+	//if err != nil {
+	//	//msg = fmt.Sprintf("email of password is incorrect")
+	//	//check = false
+	//	return false, err
+	//}
+	//return check, nil
+}
 func (a employeeService) CreateEmployeeService(data dto.Employee) error {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	data.Password = string(hashedPassword)
 	return a.employeeRepo.CreateEmployee(data)
 }
 func (a employeeService) UpdateEmployeeService(data dto.Employee) error {

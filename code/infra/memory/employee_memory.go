@@ -195,3 +195,25 @@ func (a employeeMongoRepository) FindCount(
 
 	return count, nil
 }
+func (a employeeMongoRepository) FindOneUserName(userName string) (dto.Employee, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	filters := bson.M{
+		"user_name": userName,
+	}
+
+	var result dto.Employee
+	err := a.collection.FindOne(ctx, filters).Decode(&result)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return dto.Employee{}, exception.NewAppError(
+			exception.ErrCodeNotFound,
+			"ไม่พบ: "+userName,
+		)
+	} else if err != nil {
+		return dto.Employee{}, exception.NewAppError(
+			exception.ErrCodeDatabase,
+			err.Error(),
+		)
+	}
+	return result, nil
+}

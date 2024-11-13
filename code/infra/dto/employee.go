@@ -11,6 +11,8 @@ type Employee struct {
 	Image          string         `json:"image" bson:"image"`
 	RoleID         string         `json:"role_id" bson:"role_id"`
 	Status         bool           `json:"status" bson:"status"`
+	RefreshToken   string         `json:"refresh_token" bson:"refresh_token"`
+	Token          string         `json:"token" bson:"token"`
 	TimeAt         TimeAt         `json:"-" bson:"time_at"`
 	StatusEmployee StatusEmployee `json:"status_employee" bson:"status_employee"`
 }

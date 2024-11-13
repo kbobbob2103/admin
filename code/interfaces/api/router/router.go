@@ -10,6 +10,7 @@ func ApplicationV1Routes(engine *gin.Engine) {
 	routeAmin := engine.Group("/api/admin/v1/employee")
 	adminCTL := injector.EmployeeController
 	routeAmin.POST("", adminCTL.CreateEmployeeController)
+	routeAmin.POST("login", adminCTL.Login)
 	routeAmin.PATCH("", adminCTL.UpdateEmployeeController)
 	routeAmin.PATCH("status", adminCTL.UpdateStatusController)
 	routeAmin.DELETE(":employee_id", adminCTL.DeleteController)
